@@ -275,7 +275,6 @@ export default function Home() {
               e.preventDefault();
               const text = typed.trim();
               if (!text || busy) return;
-              setTurns((prev) => [...prev, { speaker: "her", text }]);
               setTyped("");
               void sendTurn(text);
             }}

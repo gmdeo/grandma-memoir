@@ -91,8 +91,30 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("turn failed:", err);
+
+    // Distinguish "the AI is momentarily busy" from a real fault, and say
+    // something a person can act on rather than a generic apology.
+    const msg = String(err);
+    const busy = msg.includes("429") || msg.includes("model_route_busy");
+    const mic = msg.includes("transcription");
+
+    if (busy) {
+      return NextResponse.json(
+        {
+          error:
+            "I'm a little overwhelmed at the moment. Wait a few seconds and try again.",
+        },
+        { status: 503, headers: { "Retry-After": "3" } }
+      );
+    }
+    if (mic) {
+      return NextResponse.json(
+        { error: "I couldn't make out the recording. Try again — it's fine to start over." },
+        { status: 503 }
+      );
+    }
     return NextResponse.json(
-      { error: "Something went wrong on our end. Please try again." },
+      { error: "I lost that one. Please say it again." },
       { status: 500 }
     );
   }
