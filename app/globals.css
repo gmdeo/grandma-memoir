@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #17121c;
+  --color-plum: #2a1f35;
+  --color-plum-soft: #3a2c47;
+  --color-parchment: #f2e9dc;
+  --color-parchment-dim: #cfc3b4;
+  --color-amber: #e4a853;
+  --color-moss: #7e8f74;
+
+  --font-prose: var(--font-newsreader), Georgia, serif;
+  --font-ui: var(--font-karla), system-ui, sans-serif;
+}
+
+/* The app is for older eyes: nothing is allowed to be small. */
+html {
+  font-size: 18px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-parchment);
+  font-family: var(--font-ui);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* A slow lamplight bloom behind the orb — the room the conversation happens in. */
+.lamp {
+  background:
+    radial-gradient(60% 50% at 50% 42%, rgba(228, 168, 83, 0.16) 0%, transparent 70%),
+    radial-gradient(90% 70% at 50% 100%, rgba(126, 143, 116, 0.10) 0%, transparent 75%);
+}
+
+.orb {
+  background: radial-gradient(circle at 35% 30%, #f3c37a 0%, #e4a853 38%, #a86f28 78%, #6d4517 100%);
+  box-shadow:
+    0 0 0 1px rgba(242, 233, 220, 0.10),
+    0 24px 70px -12px rgba(228, 168, 83, 0.55);
+}
+
+/* Breathing while idle, listening hard while recording. */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.035); }
+}
+@keyframes listen {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.10); }
+}
+.orb-idle      { animation: breathe 6s ease-in-out infinite; }
+.orb-listening { animation: listen 1.35s ease-in-out infinite; }
+.orb-thinking  { animation: breathe 2.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-idle, .orb-listening, .orb-thinking { animation: none; }
+}
+
+/* Memoir typography: serif, generous measure, unhurried leading. */
+.prose-memoir {
+  font-family: var(--font-prose);
+  font-size: 1.24rem;
+  line-height: 1.82;
+  color: #efe4d4;
+  max-width: 64ch;
+}
+.prose-memoir h2 {
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--color-amber);
+  margin: 2.6rem 0 0.9rem;
+  letter-spacing: -0.01em;
+}
+.prose-memoir p { margin-bottom: 1.15rem; }
+
+/* The paper the book is printed on. */
+.paper {
+  background: linear-gradient(180deg, #faf5ec 0%, #f3ebdc 100%);
+  color: #2a2119;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-amber);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 50;
+  background: var(--color-amber);
+  color: var(--color-ink);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
